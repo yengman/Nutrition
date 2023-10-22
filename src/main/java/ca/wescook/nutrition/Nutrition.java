@@ -2,8 +2,11 @@ package ca.wescook.nutrition;
 
 import net.minecraftforge.common.MinecraftForge;
 
-import ca.wescook.nutrition.effects.EffectsList;
-import ca.wescook.nutrition.events.*;
+import ca.wescook.nutrition.events.EventAllowOvereating;
+import ca.wescook.nutrition.events.EventEatFood;
+import ca.wescook.nutrition.events.EventPlayerDeath;
+import ca.wescook.nutrition.events.EventPlayerJoinWorld;
+import ca.wescook.nutrition.events.EventWorldTick;
 import ca.wescook.nutrition.network.ModPacketHandler;
 import ca.wescook.nutrition.potions.ModPotions;
 import ca.wescook.nutrition.proxy.CommonProxy;
@@ -58,7 +61,6 @@ public class Nutrition {
     @EventHandler
     public void postInit(FMLPostInitializationEvent event) {
         DataImporter.reload();
-        EffectsList.registerEffects();
     }
 
     @EventHandler

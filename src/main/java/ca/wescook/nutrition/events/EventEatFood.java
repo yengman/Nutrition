@@ -1,16 +1,17 @@
 package ca.wescook.nutrition.events;
 
-import java.util.List;
+import java.util.Map;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemBucketMilk;
 import net.minecraftforge.event.entity.player.PlayerUseItemEvent;
 
 import ca.wescook.nutrition.Nutrition;
+import ca.wescook.nutrition.data.NutrientManager;
 import ca.wescook.nutrition.data.PlayerDataHandler;
 import ca.wescook.nutrition.effects.EffectsManager;
 import ca.wescook.nutrition.nutrients.Nutrient;
-import ca.wescook.nutrition.nutrients.NutrientList;
 import ca.wescook.nutrition.nutrients.NutrientUtils;
 import ca.wescook.nutrition.proxy.ClientProxy;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -57,16 +58,28 @@ public class EventEatFood {
     @SubscribeEvent
     public void onFoodEaten(FoodEvent.FoodEaten event) {
         // Calculate nutrition
-        List<Nutrient> foundNutrients = NutrientUtils.getFoodNutrients(event.food);
-        float nutritionValue = NutrientUtils.calculateNutrition(event.foodValues, foundNutrients);
+        Map<Nutrient, Float> foundNutrients = NutrientUtils.getFoodNutrients(event.food);
+
+        if (foundNutrients.containsValue(0F)) {
+            float defaultValue = NutrientUtils.calculateNutrition(event.foodValues.hunger, foundNutrients);
+            for (Nutrient nutrient : foundNutrients.keySet()) {
+                if (foundNutrients.get(nutrient) == 0F) {
+                    foundNutrients.put(nutrient, defaultValue);
+                }
+            }
+        }
 
         // Add to each nutrient
         if (!event.player.getEntityWorld().isRemote) { // Server
-            PlayerDataHandler.getForPlayer(event.player)
-                .add(foundNutrients, nutritionValue);
+            NutrientManager nutrientManager = PlayerDataHandler.getForPlayer(event.player);
+            for (Nutrient nutrient : foundNutrients.keySet()) {
+                nutrientManager.add(nutrient, foundNutrients.get(nutrient));
+            }
         } else { // Client
-            ClientProxy.localNutrition.add(foundNutrients, nutritionValue);
             // set that food has now been eaten
+            for (Nutrient nutrient : foundNutrients.keySet()) {
+                ClientProxy.localNutrition.add(nutrient, foundNutrients.get(nutrient));
+            }
             ClientProxy.popHungerChange();
         }
     }
@@ -79,15 +92,39 @@ public class EventEatFood {
             return;
         }
 
-        if (event.item.getItem() instanceof ItemBucketMilk) {
-            if (!player.getEntityWorld().isRemote) {
-                // reapply effects on server side only
-                EffectsManager.reapplyEffects(player);
-                PlayerDataHandler.getForPlayer(player)
-                    .add(NutrientList.getByName("dairy"), 1.5F);
-            } else {
-                ClientProxy.localNutrition.add(NutrientList.getByName("dairy"), 1.5F);
+        if (NutrientUtils.isSpecialFood(event.item)) {
+            Map<Nutrient, Float> foundNutrients = NutrientUtils.getFoodNutrients(event.item);
+
+            if (foundNutrients.containsValue(0F)) {
+                Item item = event.item.getItem();
+                int value = 0;
+                if (item instanceof ItemBucketMilk) {
+                    value = 4;
+                    if (!player.getEntityWorld().isRemote) {
+                        EffectsManager.reapplyEffects(player);
+                    }
+                }
+                float defaultValue = NutrientUtils.calculateNutrition(value, foundNutrients);
+                for (Nutrient nutrient : foundNutrients.keySet()) {
+                    if (foundNutrients.get(nutrient) == 0F) {
+                        foundNutrients.put(nutrient, defaultValue);
+                    }
+                }
+            }
+
+            // Add to each nutrient
+            if (!player.getEntityWorld().isRemote) { // Server
+                NutrientManager nutrientManager = PlayerDataHandler.getForPlayer(player);
+                for (Nutrient nutrient : foundNutrients.keySet()) {
+                    nutrientManager.add(nutrient, foundNutrients.get(nutrient));
+                }
+            } else { // Client
+                // set that food has now been eaten
+                for (Nutrient nutrient : foundNutrients.keySet()) {
+                    ClientProxy.localNutrition.add(nutrient, foundNutrients.get(nutrient));
+                }
             }
         }
     }
+
 }

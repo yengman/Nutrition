@@ -23,11 +23,11 @@ public class EventPlayerDeath {
         if (event.wasDeath) {
             for (Nutrient nutrient : NutrientList.get()) {
                 // If reset is disabled, only reduce to cap when above its value
-                if (Config.deathPenaltyReset || nutritionNew.get(nutrient) > Config.deathPenaltyMin) {
+                if (Config.deathPenaltyReset || nutritionNew.get(nutrient) > nutrient.deathPenaltyMin) {
                     // Subtract death penalty from each nutrient, to cap
                     nutritionNew.set(
                         nutrient,
-                        Math.max(Config.deathPenaltyMin, nutritionNew.get(nutrient) - Config.deathPenaltyLoss));
+                        Math.max(nutrient.deathPenaltyMin, nutritionNew.get(nutrient) - nutrient.deathPenaltyLoss));
                 }
             }
         }

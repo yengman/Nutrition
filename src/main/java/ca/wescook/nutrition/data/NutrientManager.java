@@ -8,7 +8,6 @@ import net.minecraft.util.MathHelper;
 
 import ca.wescook.nutrition.nutrients.Nutrient;
 import ca.wescook.nutrition.nutrients.NutrientList;
-import ca.wescook.nutrition.utility.Config;
 
 public class NutrientManager {
 
@@ -71,7 +70,7 @@ public class NutrientManager {
 
     // Reset specific nutrient to default nutrition
     public void reset(Nutrient nutrient) {
-        set(nutrient, (float) Config.startingNutrition);
+        set(nutrient, (float) nutrient.startingNutrition);
     }
 
     // Reset all nutrients to default nutrition
@@ -97,7 +96,7 @@ public class NutrientManager {
                     continue loop;
                 }
             }
-            nutrition.put(nutrient, (float) Config.startingNutrition);
+            nutrition.put(nutrient, (float) nutrient.startingNutrition);
         }
     }
 }

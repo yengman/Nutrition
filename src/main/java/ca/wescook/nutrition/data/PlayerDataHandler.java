@@ -10,7 +10,6 @@ import ca.wescook.nutrition.network.Sync;
 import ca.wescook.nutrition.nutrients.Nutrient;
 import ca.wescook.nutrition.nutrients.NutrientList;
 import ca.wescook.nutrition.proxy.ClientProxy;
-import ca.wescook.nutrition.utility.Config;
 import ca.wescook.nutrition.utility.Log;
 
 public class PlayerDataHandler {
@@ -44,7 +43,7 @@ public class PlayerDataHandler {
                 if (nutrientTag.hasKey(nutrient.name)) {
                     value = nutrientTag.getFloat(nutrient.name);
                 } else {
-                    value = (float) Config.startingNutrition;
+                    value = (float) nutrient.startingNutrition;
                 }
 
                 playerNutrients.put(nutrient, value);

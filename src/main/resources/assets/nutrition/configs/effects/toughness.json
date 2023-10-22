@@ -1,0 +1,8 @@
+{
+	"name": "toughness",
+	"potion": "potion.nutrition:toughness",
+	"minimum": 90,
+	"maximum": 100,
+	"detect": "average",
+	"enabled": true
+}

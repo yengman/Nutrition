@@ -1,0 +1,8 @@
+{
+	"name": "haste",
+	"potion": "potion.digSpeed",
+	"minimum": 90,
+	"maximum": 100,
+	"detect": "average",
+	"enabled": true
+}

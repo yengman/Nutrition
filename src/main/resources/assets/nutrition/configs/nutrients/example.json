@@ -13,7 +13,7 @@
 		"items": [                // List of item IDs for foods that are included in this nutrient
 			"minecraft:carrot",   //
 			"minecraft:apple:1",  //
-			"minecraft:cake"      //
+			"minecraft:cake/-5"   // Cake will subtract 5 from the nutrient
 		]
 	}
 }

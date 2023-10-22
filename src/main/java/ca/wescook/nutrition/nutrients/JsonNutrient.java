@@ -9,6 +9,11 @@ public class JsonNutrient {
     public String name;
     public String icon;
     public String color;
+
+    public Integer starting;
+
+    public Integer deathmin;
+    public Integer deathloss;
     public Float decay;
     public Boolean visible;
     public Boolean enabled;

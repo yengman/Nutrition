@@ -1,0 +1,8 @@
+{
+	"name": "weakness",
+	"potion": "potion.weakness",
+	"minimum": 0,
+	"maximum": 10,
+	"detect": "average",
+	"enabled": true
+}

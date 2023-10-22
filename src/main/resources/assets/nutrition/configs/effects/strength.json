@@ -1,0 +1,8 @@
+{
+	"name": "strength",
+	"potion": "potion.damageBoost",
+	"minimum": 70,
+	"maximum": 100,
+	"detect": "average",
+	"enabled": true
+}

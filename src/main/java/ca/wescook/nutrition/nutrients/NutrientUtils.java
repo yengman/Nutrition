@@ -1,9 +1,12 @@
 package ca.wescook.nutrition.nutrients;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import net.minecraft.item.*;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemBucketMilk;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
 import ca.wescook.nutrition.utility.Config;
@@ -14,15 +17,15 @@ import squeek.applecore.api.food.FoodValues;
 public class NutrientUtils {
 
     // Returns list of nutrients that food belongs to
-    public static List<Nutrient> getFoodNutrients(ItemStack eatingFood) {
-        List<Nutrient> nutrientsFound = new ArrayList<>();
+    public static Map<Nutrient, Float> getFoodNutrients(ItemStack eatingFood) {
+        Map<Nutrient, Float> nutrientsFound = new HashMap<>();
 
         // Loop through nutrients to look for food
         foodSearch: for (Nutrient nutrient : NutrientList.get()) { // All nutrients
             // Search foods
-            for (ItemStack listedFood : nutrient.foodItems) { // All foods in that category
+            for (ItemStack listedFood : nutrient.foodItems.keySet()) { // All foods in that category
                 if (listedFood.isItemEqual(eatingFood)) {
-                    nutrientsFound.add(nutrient); // Add nutrient
+                    nutrientsFound.put(nutrient, nutrient.foodItems.get(listedFood));// Add nutrient
                     continue foodSearch; // Skip rest of search in this nutrient, try others
                 }
             }
@@ -32,7 +35,7 @@ public class NutrientUtils {
                 for (ItemStack itemStack : OreDictionary.getOres(listedOreDict)) { // All items that match that oredict
                     // (eg. listAllmilk)
                     if (itemStack.isItemEqual(eatingFood)) { // Our food matches oredict
-                        nutrientsFound.add(nutrient); // Add nutrient
+                        nutrientsFound.put(nutrient, 0F); // Add nutrient
                         continue foodSearch; // Skip rest of search in this nutrient, try others
                     }
                 }
@@ -44,8 +47,8 @@ public class NutrientUtils {
 
     // Calculate nutrition value for supplied food
     // Requires nutrient list from that food for performance reasons (see getFoodNutrients)
-    public static float calculateNutrition(FoodValues foodValues, List<Nutrient> nutrients) {
-        return getNutrientValue(foodValues.hunger, nutrients.size());
+    public static float calculateNutrition(int foodValues, Map<Nutrient, Float> nutrients) {
+        return getNutrientValue(foodValues, nutrients.size());
     }
 
     public static float getNutrientValue(int hungerValue, int numNutrients) {
@@ -66,5 +69,9 @@ public class NutrientUtils {
             if (AppleCoreAPI.accessor.isFood(itemStack) && getFoodNutrients(itemStack).size() == 0)
                 Log.warn("Registered food without nutrients: " + item.getUnlocalizedName());
         }
+    }
+
+    public static boolean isSpecialFood(ItemStack itemStack) {
+        return itemStack.getItem() instanceof ItemBucketMilk;
     }
 }

@@ -1,0 +1,8 @@
+{
+	"name": "resistance",
+	"potion": "potion.resistance",
+	"minimum": 80,
+	"maximum": 100,
+	"detect": "average",
+	"enabled": true
+}
