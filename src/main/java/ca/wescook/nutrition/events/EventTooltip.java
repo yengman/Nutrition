@@ -60,23 +60,20 @@ public class EventTooltip {
                     nutrients.add(nutrient);
                     sortedNutrients.put(nutritionValue, nutrients);
                 } else {
-                    sortedNutrients.get(nutritionValue).add(nutrient);
+                    sortedNutrients.get(nutritionValue)
+                        .add(nutrient);
                 }
             }
         }
 
-        for (float nutritionValue : sortedNutrients.keySet()){
+        for (float nutritionValue : sortedNutrients.keySet()) {
             StringBuilder sortedNutrient = new StringBuilder();
-            for (Nutrient nutrient : sortedNutrients.get(nutritionValue)){
+            for (Nutrient nutrient : sortedNutrients.get(nutritionValue)) {
                 sortedNutrient.append(I18n.format("nutrient." + Tags.MODID + ":" + nutrient.name) + " ");
             }
             stringJoiner.add(
-                EnumChatFormatting.DARK_GREEN
-                + sortedNutrient.toString()
-                + EnumChatFormatting.DARK_AQUA
-                    + "("
-                    + String.format("%.1f", nutritionValue)
-                    + "%)");
+                EnumChatFormatting.DARK_GREEN + sortedNutrient
+                    .toString() + EnumChatFormatting.DARK_AQUA + "(" + String.format("%.1f", nutritionValue) + "%)");
         }
         String nutrientString = stringJoiner.toString();
 

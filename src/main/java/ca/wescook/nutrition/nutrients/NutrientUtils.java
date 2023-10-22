@@ -1,7 +1,6 @@
 package ca.wescook.nutrition.nutrients;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import net.minecraft.item.Item;
@@ -12,7 +11,6 @@ import net.minecraftforge.oredict.OreDictionary;
 import ca.wescook.nutrition.utility.Config;
 import ca.wescook.nutrition.utility.Log;
 import squeek.applecore.api.AppleCoreAPI;
-import squeek.applecore.api.food.FoodValues;
 
 public class NutrientUtils {
 

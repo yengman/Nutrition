@@ -3,7 +3,6 @@ package ca.wescook.nutrition.utility;
 import java.util.ArrayList;
 import java.util.List;
 
-import ca.wescook.nutrition.nutrients.NutrientUtils;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
@@ -15,6 +14,7 @@ import ca.wescook.nutrition.effects.JsonEffect;
 import ca.wescook.nutrition.nutrients.JsonNutrient;
 import ca.wescook.nutrition.nutrients.Nutrient;
 import ca.wescook.nutrition.nutrients.NutrientList;
+import ca.wescook.nutrition.nutrients.NutrientUtils;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.registry.GameRegistry;
 import squeek.applecore.api.AppleCoreAPI;
@@ -248,7 +248,7 @@ public class DataParser {
 
         if (nameWithValue.length == 2) {
             if (NumberUtils.isNumber(nameWithValue[1])) {
-                value = Float.valueOf(nameWithValue[1]);
+                value = Float.parseFloat(nameWithValue[1]);
             } else {
                 Log.warn(fullName + " has an invalid custom value");
                 return null;
